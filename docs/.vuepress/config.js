@@ -1,7 +1,6 @@
 module.exports = {
   title: "nicolv的前端日志",
   description: "欢迎访问我的前端日志",
-  base: "/",
   markdown: {
     lineNumbers: true
   },
