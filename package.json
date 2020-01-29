@@ -1,6 +1,6 @@
 {
-  "name": "lmjben-blog",
-  "version": "1.3.2",
+  "name": "nicolv-blog",
+  "version": "0.0.1",
   "description": "my personal blog",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
       "pre-commit": "npm run lint"
     }
   },
-  "author": "lmjben",
+  "author": "nicolv",
   "license": "ISC",
   "devDependencies": {
     "@vuepress/plugin-back-to-top": "^1.2.0",
