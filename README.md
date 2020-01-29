@@ -1,7 +1,7 @@
 # 个人博客
 记录工作中遇到的问题，平时看书的总结，面试题，以及一些个人思考。
 
-访问地址：[nicolv.github.io](https://nicolv.github.io/)
+访问地址：[nicolv.github.io/blog](https://nicolv.github.io/blog)
 
 ## 使用
 
