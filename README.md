@@ -9,7 +9,7 @@
 
 ```sh
 # clone with Git Bash
-git clone https://github.com/nicolv/blog.git
+git clone git@github.com:nicolv/nicolv.github.io.git
 
 # change directory
 cd blog
