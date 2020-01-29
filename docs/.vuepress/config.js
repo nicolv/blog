@@ -5,7 +5,7 @@ module.exports = {
     lineNumbers: true
   },
   head: [
-    ['link', { rel: 'icon', href: '/hero.jpeg' }]
+    ['link', { rel: 'icon', href: '/nicolv.jpg' }]
   ],
   themeConfig: {
     repo: "nicolv/blog",
