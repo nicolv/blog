@@ -12,7 +12,7 @@
 git clone git@github.com:nicolv/nicolv.github.io.git
 
 # change directory
-cd blog
+cd nicolv.github.io
 
 # install dependencies
 npm i
