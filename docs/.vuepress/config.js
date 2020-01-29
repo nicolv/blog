@@ -8,7 +8,7 @@ module.exports = {
     ['link', { rel: 'icon', href: '/hero.jpeg' }]
   ],
   themeConfig: {
-    repo: "lmjben/blog",
+    repo: "nicolv/blog",
     nav: [
       {
         text: "博客",
@@ -21,7 +21,7 @@ module.exports = {
           title: 'JS 基础',
           collapsable: false,
           children: [
-            "js-compiling-running",
+            "js-compiling-running.html",
           ]
         },
       ],

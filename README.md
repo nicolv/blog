@@ -1,11 +1,7 @@
 # 个人博客
-
-[![Build Status](https://www.travis-ci.org/lmjben/blog.svg?branch=master)](https://www.travis-ci.org/lmjben/blog)
-[![CodeFactor](https://www.codefactor.io/repository/github/lmjben/blog/badge)](https://www.codefactor.io/repository/github/lmjben/blog) [![Greenkeeper badge](https://badges.greenkeeper.io/lmjben/blog.svg)](https://greenkeeper.io/)
-
 记录工作中遇到的问题，平时看书的总结，面试题，以及一些个人思考。
 
-访问地址：[lmjben.github.io](https://lmjben.github.io/)
+访问地址：[nicolv.github.io](https://nicolv.github.io/)
 
 ## 使用
 
@@ -13,7 +9,7 @@
 
 ```sh
 # clone with Git Bash
-git clone https://github.com/lmjben/blog.git
+git clone https://github.com/nicolv/blog.git
 
 # change directory
 cd blog
@@ -36,3 +32,7 @@ npm run build
 #### | JS 基础
 
 - [JS编程与运行](https://nicolv.github.io/blog/js-compiling-running.html)
+
+## 感谢
+
+[Imjben](https://lmjben.github.io/blog/)
