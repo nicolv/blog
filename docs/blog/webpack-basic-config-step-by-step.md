@@ -1,6 +1,6 @@
-# webpack基础配置
+# webpack 基础配置
 
-直接上代码吧还是，这里用的是webpack4。据说webpack5就上了？
+直接上代码吧还是，这里用的是 webpack4。据说 webpack5 就上了？
 
 ```cmd
 cd spa-webpack
@@ -8,9 +8,9 @@ npm init -y
 npm install webpack --save-dev
 ```
 
-*此处需要提一句：如果是在国内，就翻墙吧；要么就用CNPM，速度快。*
+*此处需要提一句：如果是在国内，就翻墙吧；要么就用 CNPM，速度快。*
 
-首先，我们先体验一下webpack4的0配置。
+首先，我们先体验一下 webpack4 的 0 配置。
 
 ```javascript
 // 简单配置一下package.json文件
@@ -41,7 +41,7 @@ rem 此处会提示安装webpack-cli，官方文档也提到webpack和webpack-cl
 
 ```
 
-运行完之后，可以看到根目录下多了个dist文件夹，里面是在webpack development mode 下处理完的结果。
+运行完之后，可以看到根目录下多了个 dist 文件夹，里面是在 webpack development mode 下处理完的结果。
 
 spa-webpack  
 　├ dist  
@@ -57,10 +57,10 @@ rem 然后运行webpack prod
 npm run prod
 ```
 
-对比0配置下的dev和prod输出，dev模式花费了较少的时间，输出了一个没有被压缩过的main.js；prod模式花费了较多的时间，输出了一个被压缩过的体积较小的main.js。
+对比 0 配置下的 dev 和 prod 输出，dev 模式花费了较少的时间，输出了一个没有被压缩过的 main.js；prod 模式花费了较多的时间，输出了一个被压缩过的体积较小的 main.js。
 
 dev
-```
+```plain
 Hash: 3726ffe5c0575fcf34c9
 Version: webpack 4.41.5
 Time: 144ms
@@ -72,7 +72,7 @@ Entrypoint main = main.js
 ```
 
 prod
-```
+```plain
 Hash: 2f69b8c440b53d5a812a
 Version: webpack 4.41.5
 Time: 584ms
@@ -83,9 +83,9 @@ Entrypoint main = main.js
 [0] ./src/index.js 27 bytes {0} [built]
 ```
 
-但webpack的0配置不止这些，还自带一个非常牛逼的功能————tree sharking。但是webpack的0配置中的tree sharking真的那么好用吗？
+但 webpack 的 0 配置不止这些，还自带一个非常牛逼的功能————tree sharking。但是 webpack 的 0 配置中的 tree sharking 真的那么好用吗？
 
-我们先体验一下它自带的tree sharking。修改src目录下的文件，增加一个新的js文件sync.js，并且修改index.js的内容。
+我们先体验一下它自带的 tree sharking。修改 src 目录下的文件，增加一个新的 js 文件 sync.js，并且修改 index.js 的内容。
 
 ```javascript
 // index.js内容如下
@@ -120,8 +120,8 @@ export {
 }
 ```
 
-dev模式
-```
+dev 模式
+```plain
 Hash: 1184af75f31e05d622aa
 Version: webpack 4.41.5
 Time: 2111ms
@@ -135,8 +135,8 @@ Entrypoint main = main.js
     + 639 hidden modules
 ```
 
-prod模式
-```
+prod 模式
+```plain
 Hash: 000e36f361fa6727ac25
 Version: webpack 4.41.5
 Time: 5500ms
@@ -152,17 +152,17 @@ Entrypoint main = main.js
     + 28 hidden modules
 ```
 
-dev模式用了2秒，产出了个1M多的文件。prod模式用了5秒，产出了个85K的文件。打开产出物main.js查看：dev模式保留了所有的函数定义，包括整个lodash-es。prod模式，并没有搜索到noUseFun和noUseFun2的定义，但是却看到了整个lodash-es，所以文件很大。为什么lodash-es没有被tree sharking掉？因为在0配置的webpack production 模式中，webpack无法判断函数式编程的lodash-es是否被使用（纯函数驱动、颗粒化函数改变业务时，才考虑它），webpack无法tree sharking到函数式作用域之内的东西。（类和块都是构建作用域的）
+dev 模式用了 2 秒，产出了个 1M 多的文件。prod 模式用了 5 秒，产出了个 85K 的文件。打开产出物 main.js 查看：dev 模式保留了所有的函数定义，包括整个 lodash-es。prod 模式，并没有搜索到 noUseFun 和 noUseFun2 的定义，但是却看到了整个 lodash-es，所以文件很大。为什么 lodash-es 没有被 tree sharking 掉？因为在 0 配置的 webpack production 模式中，webpack 无法判断函数式编程的 lodash-es 是否被使用（纯函数驱动、颗粒化函数改变业务时，才考虑它），webpack 无法 tree sharking 到函数式作用域之内的东西。（类和块都是构建作用域的）
 
-那么，怎么去掉这个没用到的lodash-es呢？
-好用的插件1：webpack-deep-scope-plugin
+那么，怎么去掉这个没用到的 lodash-es 呢？
+好用的插件 1：webpack-deep-scope-plugin
 此插件能深度分析作用域，怎么实现的看源码。
 
 ```cmd
 npm install webpack-deep-scope-plugin --save-dev
 ```
 
-在根目录下增加webpack.config.js，配置它：
+在根目录下增加 webpack.config.js，配置它：
 ```javascript
 const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin').default;
 
@@ -173,8 +173,8 @@ module.exports = {
 }
 ```
 
-再次运行npm run prod
-```
+再次运行 npm run prod
+```plain
 Hash: 31e28397f18aa8b07e69
 Version: webpack 4.41.5
 Time: 2438ms
@@ -190,4 +190,4 @@ Entrypoint main = main.js
     + 638 hidden modules
 ```
 
-体积从85K锐减到1k；打开main.js查看，发现lodash不见了。完美！
+体积从 85K 锐减到 1k；打开 main.js 查看，发现 lodash 不见了。完美！
