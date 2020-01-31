@@ -191,3 +191,138 @@ Entrypoint main = main.js
 ```
 
 体积从 85K 锐减到 1k；打开 main.js 查看，发现 lodash 不见了。完美！
+
+到目前为止，已经完成了js的tree sharking。那么css的tree sharking又该怎么做呢？
+
+首先，我们准备下环境。
+
+在根目录下添加index.css
+```css
+.test {
+    --fontColor: yellowgreen;
+    color: var(--fontColor);
+}
+
+/* test2 没有被使用，应该被tree sharking掉 */
+.test2 {
+    --fontColor: aquamarine;
+    color: var(--fontColor);
+}
+
+```
+
+修改index.js
+```javascript
+import css from "./index.css"
+
+console.log("hello nicolv")
+document.getElementById("hero").innerHTML = `<h1 class=${css.test}>Hello Nico</h1>`
+```
+
+在dist下手工添加index.html文件
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Hello SPA Webpack</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+    
+</head>
+<body id="hero">
+    <script src='main.js'></script>
+</body>
+</html>
+```
+
+然后执行npm run dev，发现缺少css-loader。由于css-loader和style-loader是好朋友，所以一起安装。为我们的 webpack.config.js文件配置上这两个loader。
+
+css-loader 的功能之一是支持js中import css文件。  
+style-loader 的功能是让css中的样式可以被插入到html中。
+
+```javascript
+module.exports = {
+    module: {
+        rules: [{
+            test: /\.css$/i,
+            use: ["style-loader", "css-loader"]
+        }]
+    },
+}
+```
+
+再次运行npm run dev，并且访问index.html，发现style并没有生效：hello nico并没有变成骚气的yellowgreen色，为什么？inspect hello nico这个element，发现它的class并没有变成test，而是undefined；但是在head中，test这个class已经被定义了。怎么破？其实css-loader可以带有很多参数，modules是其中一个，它能把class的名字md5化，并且和inspect hello nico这个element的class对应。所以修改 webpack.config.js
+
+```javascript
+module.exports = {
+    module: {
+        rules: [{
+            test: /\.css$/i,
+            use: ["style-loader", "css-loader?modules"]
+        }]
+    },
+}
+```
+
+并再次运行 npm run dev
+
+ok，hello nico已经变成了黄绿色。打开elements panel，发现test这个class已经变成了_2ivjil36bq3On5pLLeuhsP。这个名字太丑了，我们需要一个好看点的名字，方便我们调试。此时需要介绍css-loader的另一个配置：localIdentName，它可以把css class的名字变得好看。修改配置如下：
+```javascript
+module: {
+  rules: [{
+    test: /\.css$/i,
+      use: [
+        "style-loader",
+        {
+          // https://github.com/webpack-contrib/css-loader
+          loader: "css-loader",
+          options: {
+            modules: {
+              localIdentName: "[path][local]_[hash:base64:5]",
+              context: path.resolve(__dirname, "src/components")
+            }
+          }
+        }
+      ]
+  }],
+},
+```
+
+运行后，在element中看下结果：
+```html
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hello SPA Webpack</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+    
+    <style>
+    .sync-test_6LuBr {
+        --fontColor: yellowgreen;
+    }
+
+    .sync-test_6LuBr {
+        color: var(--fontColor);
+    }
+
+    /* test2 没有被使用，应该被tree sharking掉 */
+    .sync-test2_14KmK {
+        --fontColor: aquamarine;
+    }
+
+    .sync-test2_14KmK {
+        --fontColor: var(--fontColor);
+    }
+    </style>
+  </head>
+  <body id="hero">
+    <h1 class="sync-test_6LuBr">Hello Nico</h1>
+  </body>
+</html>
+```
+此时，class的名字已经变得好认了。不过该被tree sharking掉的部分却还在。即使运行了npm run prod也是一样的。此时该请出另一个神器：purgecss-webpack-plugin，安装并配置到webpack.config.js中
+
