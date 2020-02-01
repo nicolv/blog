@@ -192,11 +192,11 @@ Entrypoint main = main.js
 
 体积从 85K 锐减到 1k；打开 main.js 查看，发现 lodash 不见了。完美！
 
-到目前为止，已经完成了js的tree sharking。那么css的tree sharking又该怎么做呢？
+到目前为止，已经完成了 js 的 tree sharking。那么 css 的 tree sharking 又该怎么做呢？
 
 首先，我们准备下环境。
 
-在根目录下添加index.css
+在根目录下添加 index.css
 ```css
 .test {
     --fontColor: yellowgreen;
@@ -211,7 +211,7 @@ Entrypoint main = main.js
 
 ```
 
-修改index.js
+修改 index.js
 ```javascript
 import css from "./index.css"
 
@@ -219,7 +219,7 @@ console.log("hello nicolv")
 document.getElementById("hero").innerHTML = `<h1 class=${css.test}>Hello Nico</h1>`
 ```
 
-在dist下手工添加index.html文件
+在 dist 下手工添加 index.html 文件
 ```html
 <!DOCTYPE html>
 <html>
@@ -237,10 +237,10 @@ document.getElementById("hero").innerHTML = `<h1 class=${css.test}>Hello Nico</h
 </html>
 ```
 
-然后执行npm run dev，发现缺少css-loader。由于css-loader和style-loader是好朋友，所以一起安装。为我们的 webpack.config.js文件配置上这两个loader。
+然后执行 npm run dev，发现缺少 css-loader。由于 css-loader 和 style-loader 是好朋友，所以一起安装。为我们的 webpack.config.js 文件配置上这两个 loader。
 
-css-loader 的功能之一是支持js中import css文件。  
-style-loader 的功能是让css中的样式可以被插入到html中。
+css-loader 的功能之一是支持 js 中 import css 文件。  
+style-loader 的功能是让 css 中的样式可以被插入到 html 中。
 
 ```javascript
 module.exports = {
@@ -253,7 +253,7 @@ module.exports = {
 }
 ```
 
-再次运行npm run dev，并且访问index.html，发现style并没有生效：hello nico并没有变成骚气的yellowgreen色，为什么？inspect hello nico这个element，发现它的class并没有变成test，而是undefined；但是在head中，test这个class已经被定义了。怎么破？其实css-loader可以带有很多参数，modules是其中一个，它能把class的名字md5化，并且和inspect hello nico这个element的class对应。所以修改 webpack.config.js
+再次运行 npm run dev，并且访问 index.html，发现 style 并没有生效：hello nico 并没有变成骚气的 yellowgreen 色，为什么？inspect hello nico 这个 element，发现它的 class 并没有变成 test，而是 undefined；但是在 head 中，test 这个 class 已经被定义了。怎么破？其实 css-loader 可以带有很多参数，modules 是其中一个，它能把 class 的名字 md5 化，并且和 inspect hello nico 这个 element 的 class 对应。所以修改 webpack.config.js
 
 ```javascript
 module.exports = {
@@ -268,7 +268,7 @@ module.exports = {
 
 并再次运行 npm run dev
 
-ok，hello nico已经变成了黄绿色。打开elements panel，发现test这个class已经变成了_2ivjil36bq3On5pLLeuhsP。这个名字太丑了，我们需要一个好看点的名字，方便我们调试。此时需要介绍css-loader的另一个配置：localIdentName，它可以把css class的名字变得好看。修改配置如下：
+ok，hello nico 已经变成了黄绿色。打开 elements panel，发现 test 这个 class 已经变成了_2ivjil36bq3On5pLLeuhsP。这个名字太丑了，我们需要一个好看点的名字，方便我们调试。此时需要介绍 css-loader 的另一个配置：localIdentName，它可以把 css class 的名字变得好看。修改配置如下：
 ```javascript
 module: {
   rules: [{
@@ -290,7 +290,7 @@ module: {
 },
 ```
 
-运行后，在element中看下结果：
+运行后，在 element 中看下结果：
 ```html
 <html>
   <head>
@@ -324,5 +324,5 @@ module: {
   </body>
 </html>
 ```
-此时，class的名字已经变得好认了。不过该被tree sharking掉的部分却还在。即使运行了npm run prod也是一样的。此时该请出另一个神器：purgecss-webpack-plugin，安装并配置到webpack.config.js中
+此时，class 的名字已经变得好认了。不过该被 tree sharking 掉的部分却还在。即使运行了 npm run prod 也是一样的。此时该请出另一个神器：purgecss-webpack-plugin，安装并配置到 webpack.config.js 中
 
